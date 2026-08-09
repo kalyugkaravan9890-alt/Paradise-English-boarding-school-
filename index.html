@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradise English Boarding School</title>
+    <style>
+        :root {
+            --primary: #4A3F9D;
+            --primary-dark: #372E7A;
+            --primary-light: #EEECF9;
+            --accent: #FFB800;
+            --bg-color: #F4F5FA;
+            --card-bg: #FFFFFF;
+            --text-main: #2C2C2E;
+            --text-sub: #6C6C70;
+            --border-color: #E2E2E9;
+            --success: #28A745;
+            --danger: #DC3545;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #121216;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Responsive Shell */
+        .app-shell {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            max-height: 920px;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        /* Push Notification Banner Simulator */
+        #pushNotificationBanner {
+            position: absolute;
+            top: -100px;
+            left: 12px;
+            right: 12px;
+            background: #2C2C2E;
+            color: white;
+            padding: 14px 16px;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-left: 5px solid var(--accent);
+        }
+        #pushNotificationBanner.show {
+            top: 15px;
+        }
+        .push-icon {
+            font-size: 24px;
+            background: rgba(255,255,255,0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .push-content h5 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #FFB800;
+            margin-bottom: 2px;
+        }
+        .push-content p {
+            font-size: 12px;
+            color: #E2E2E9;
+            line-height: 1.3;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(160deg, #4A3F9D 0%, #2A2363 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .login-card {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 32px 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            text-align: center;
+        }
+
+        .logo-container {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 12px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .school-title {
+            color: var(--primary-dark);
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin-bottom: 3px;
+        }
+
+        .school-subtitle {
+            color: var(--text-sub);
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+            margin-left: 2px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            font-size: 16px;
+            color: var(--text-sub);
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 13px 14px 13px 42px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.2s ease;
+            background: #FAFAFC;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--primary);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(74, 63, 157, 0.15);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            box-shadow: 0 6px 16px rgba(74, 63, 157, 0.35);
+        }
+
+        /* Header View */
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255,255,255,0.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.4);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 16px;
+            padding-bottom: 80px;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 14px 0 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-item:last-child {
+            border-bottom: none;
+        }
+
+        .icon-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .item-text h4 {
+            font-size: 14px;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .item-text p {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
+
+        .item-date {
+            margin-left: auto;
+            font-size: 11px;
+            color: var(--text-sub);
+            text-align: right;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .btn-success { background-color: var(--success); }
+        .btn-danger { background-color: var(--danger); }
+        .btn-download {
+            display: inline-block;
+            background-color: var(--success);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .att-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .att-row:last-child { border-bottom: none; }
+
+        .att-student {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .att-student img {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .att-actions { display: flex; gap: 6px; }
+
+        .btn-toggle {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: white;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-toggle.present { background-color: #E6F4EA; color: var(--success); border-color: var(--success); }
+        .btn-toggle.absent { background-color: #FCE8E6; color: var(--danger); border-color: var(--danger); }
+
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 65px;
+            background: white;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 90;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-sub);
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .nav-item.active { color: var(--primary); font-weight: 700; }
+        .nav-icon { font-size: 20px; margin-bottom: 2px; }
+
+        .bs-badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <!-- Push Notification Popup Bar -->
+        <div id="pushNotificationBanner">
+            <div class="push-icon">🔔</div>
+            <div class="push-content">
+                <h5 id="pushNotifTitle">Paradise School Alert</h5>
+                <p id="pushNotifMessage">New update received.</p>
+            </div>
+        </div>
+
+        <!-- Login Screen -->
+        <div id="loginView" class="login-screen">
+            <div class="login-card">
+                <div class="logo-container">
+                    <svg width="105" height="105" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="100" cy="100" r="95" fill="none" stroke="#2A2363" stroke-width="5"/>
+                        <circle cx="100" cy="100" r="86" fill="none" stroke="#2A2363" stroke-width="2"/>
+                        <circle cx="100" cy="100" r="56" fill="none" stroke="#2A2363" stroke-width="2"/>
+                        <polygon points="100,46 148,130 52,130" fill="none" stroke="#2A2363" stroke-width="2.5"/>
+                        <polygon points="100,154 148,70 52,70" fill="none" stroke="#2A2363" stroke-width="2.5"/>
+                        <path d="M 85,92 Q 100,88 100,98 L 100,116 Q 100,106 85,110 Z" fill="#2A2363"/>
+                        <path d="M 115,92 Q 100,88 100,98 L 100,116 Q 100,106 115,110 Z" fill="#2A2363"/>
+                        <text x="70" y="85" font-family="Arial" font-weight="bold" font-size="13" fill="#2A2363">D</text>
+                        <text x="96" y="65" font-family="Arial" font-weight="bold" font-size="13" fill="#2A2363">P</text>
+                        <text x="122" y="85" font-family="Arial" font-weight="bold" font-size="13" fill="#2A2363">E</text>
+                        <text x="122" y="120" font-family="Arial" font-weight="bold" font-size="13" fill="#2A2363">S</text>
+                        <text x="96" y="142" font-family="Arial" font-weight="bold" font-size="11" fill="#2A2363">2067</text>
+                        <text x="70" y="120" font-family="Arial" font-weight="bold" font-size="10" fill="#2A2363">Estd.</text>
+                    </svg>
+                </div>
+                <h2 class="school-title">Paradise English School</h2>
+                <p class="school-subtitle">Janak Nandini-4, Khajuri (Dhanusha)</p>
+
+                <div class="input-group">
+                    <label>Username</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="loginUsername" placeholder="Enter your username">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="loginPassword" placeholder="Enter your password">
+                    </div>
+                </div>
+
+                <button class="btn-login" onclick="handleLogin()">Sign In to Portal</button>
+            </div>
+        </div>
+
+        <!-- Main Portal Views -->
+        <div id="mainApp" style="display:none; flex-direction:column; height:100%;">
+            <div class="header">
+                <div>
+                    <h1>Paradise English Boarding School</h1>
+                    <span id="userRoleBadge" style="font-size: 10px; opacity: 0.9; text-transform: uppercase;"></span>
+                </div>
+                <div class="user-info">
+                    <div class="avatar" id="userAvatar">S</div>
+                    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="content-area" id="mainContent"></div>
+
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="switchTab('home', this)">
+                    <span class="nav-icon">🏠</span>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('notices', this)">
+                    <span class="nav-icon">🔔</span>
+                    <span>Notices</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('calendar', this)">
+                    <span class="nav-icon">📅</span>
+                    <span>Calendar</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('menu', this)">
+                    <span class="nav-icon">☰</span>
+                    <span>Menu</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const classList = ['All Classes', 'PG', 'Nursery', 'LKG', 'UKG', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'];
+        const nepaliMonths = ['Baishakh', 'Jestha', 'Ashadh', 'Shrawan', 'Bhadra', 'Ashwin', 'Kartik', 'Mangsir', 'Poush', 'Magh', 'Falgun', 'Chaitra'];
+        
+        let accounts = JSON.parse(localStorage.getItem('paradise_accounts')) || [
+            { id: 1, username: 'shikha', password: '1234', role: 'student', name: 'Shikha Kumari', class: 'Class 5', photo: '' },
+            { id: 2, username: 'aarav', password: '1234', role: 'student', name: 'Aarav Sharma', class: 'Class 4', photo: '' },
+            { id: 101, username: 'teacher', password: '1234', role: 'teacher', name: 'Sujata Thapa', subject: 'English', photo: '' },
+            { id: 999, username: 'admin', password: '1234', role: 'admin', name: 'School Admin', photo: '' }
+        ];
+
+        let homeworks = JSON.parse(localStorage.getItem('paradise_homeworks')) || [
+            { id: 101, subject: 'English', details: 'Read Chapter 3 and write vocabulary meanings.', targetClass: 'All Classes', deadline: '2083 Shrawan 25 B.S.', image: '' }
+        ];
+
+        let notices = JSON.parse(localStorage.getItem('paradise_notices')) || [
+            { id: 201, title: 'School Reopen Notice', targetClass: 'All Classes', date: '2083 Shrawan 20 B.S.', detail: 'Classes restart tomorrow at 9:00 AM.' }
+        ];
+
+        let calendarEvents = JSON.parse(localStorage.getItem('paradise_calendar')) || [
+            { id: 301, month: 'Shrawan', day: '01', title: 'Classes Resume', type: 'Event' }
+        ];
+
+        let attendanceRecords = JSON.parse(localStorage.getItem('paradise_attendance')) || {};
+        let currentUser = JSON.parse(localStorage.getItem('paradise_current_user')) || null;
+        let currentTab = 'home';
+
+        // Real-time synchronization across devices and browser tabs
+        window.addEventListener('storage', function(e) {
+            accounts = JSON.parse(localStorage.getItem('paradise_accounts')) || accounts;
+            homeworks = JSON.parse(localStorage.getItem('paradise_homeworks')) || homeworks;
+            notices = JSON.parse(localStorage.getItem('paradise_notices')) || notices;
+            calendarEvents = JSON.parse(localStorage.getItem('paradise_calendar')) || calendarEvents;
+            attendanceRecords = JSON.parse(localStorage.getItem('paradise_attendance')) || attendanceRecords;
+            
+            if (currentUser) {
+                renderTab();
+            }
+        });
+
+        function saveData() {
+            localStorage.setItem('paradise_accounts', JSON.stringify(accounts));
+            localStorage.setItem('paradise_homeworks', JSON.stringify(homeworks));
+            localStorage.setItem('paradise_notices', JSON.stringify(notices));
+            localStorage.setItem('paradise_calendar', JSON.stringify(calendarEvents));
+            localStorage.setItem('paradise_attendance', JSON.stringify(attendanceRecords));
+        }
+
+        window.onload = function() {
+            if (currentUser) {
+                document.getElementById('loginView').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'flex';
+                updateHeaderUser();
+                switchTab('home');
+            }
+        };
+
+        function updateHeaderUser() {
+            document.getElementById('userRoleBadge').innerText = currentUser.role + (currentUser.class ? ` (${currentUser.class})` : '');
+            const avatarDiv = document.getElementById('userAvatar');
+            if(currentUser.photo) {
+                avatarDiv.innerHTML = `<img src="${currentUser.photo}">`;
+            } else {
+                avatarDiv.innerText = currentUser.name.substring(0,2).toUpperCase();
+            }
+        }
+
+        function triggerPushNotification(title, message) {
+            if (currentUser && currentUser.role === 'student') {
+                const banner = document.getElementById('pushNotificationBanner');
+                document.getElementById('pushNotifTitle').innerText = title;
+                document.getElementById('pushNotifMessage').innerText = message;
+                
+                banner.classList.add('show');
+                setTimeout(() => {
+                    banner.classList.remove('show');
+                }, 4500);
+            }
+        }
+
+        function handleLogin() {
+            const u = document.getElementById('loginUsername').value.trim().toLowerCase();
+            const p = document.getElementById('loginPassword').value.trim();
+            
+            accounts = JSON.parse(localStorage.getItem('paradise_accounts')) || accounts;
+            const user = accounts.find(a => a.username.toLowerCase() === u && a.password === p);
+
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('paradise_current_user', JSON.stringify(user));
+                document.getElementById('loginView').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'flex';
+                updateHeaderUser();
+                switchTab('home');
+            } else {
+                alert('Invalid Username or Password! कृपया सहि युजरनेम र पासवर्ड राख्नुहोला।');
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('paradise_current_user');
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginView').style.display = 'flex';
+        }
+
+        function switchTab(tab, el) {
+            currentTab = tab;
+            if(el) {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                el.classList.add('active');
+            }
+            renderTab();
+        }
+
+        function renderTab() {
+            const main = document.getElementById('mainContent');
+            if (currentTab === 'home') renderHome(main);
+            else if (currentTab === 'notices') renderNotices(main);
+            else if (currentTab === 'calendar') renderCalendar(main);
+            else if (currentTab === 'menu') renderMenu(main);
+        }
+
+        function renderHome(container) {
+            let userHW = homeworks;
+            if (currentUser.role === 'student') {
+                userHW = homeworks.filter(h => h.targetClass === 'All Classes' || h.targetClass === currentUser.class);
+            }
+
+            let userNotices = notices;
+            if (currentUser.role === 'student') {
+                userNotices = notices.filter(n => n.targetClass === 'All Classes' || n.targetClass === currentUser.class);
+            }
+
+            container.innerHTML = `
+                <div class="section-title">
+                    <span>Welcome, ${currentUser.name}</span>
+                    <span class="bs-badge">2083 Shrawan 23 B.S.</span>
+                </div>
+
+                <div class="card">
+                    <div style="font-weight:600; font-size:13px; color:var(--text-sub); margin-bottom:10px;">✎ Homework Assigned</div>
+                    ${userHW.length === 0 ? '<p style="font-size:12px; color:var(--text-sub);">No homework assigned.</p>' : ''}
+                    ${userHW.map(h => `
+                        <div class="card-item" style="flex-direction:column; align-items:flex-start;">
+                            <div style="width:100%; display:flex; justify-content:space-between; align-items:flex-start;">
+                                <div>
+                                    <h4>${h.subject} <span class="bs-badge">${h.targetClass}</span></h4>
+                                    <p>${h.details}</p>
+                                </div>
+                                <div class="item-date">Due:<br>${h.deadline}</div>
+                            </div>
+                            ${h.image ? `
+                                <div style="margin-top:8px; width:100%;">
+                                    <img src="${h.image}" style="max-width:100%; max-height:180px; border-radius:8px; object-fit:contain; background:#000;" alt="Homework Photo">
+                                    <div>
+                                        <a href="${h.image}" download="homework_${h.subject}.jpg" class="btn-download">📥 Download Image / Photo</a>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="section-title">Latest Updates</div>
+                <div class="card">
+                    ${userNotices.length === 0 ? '<p style="font-size:12px; color:var(--text-sub);">No notices available.</p>' : ''}
+                    ${userNotices.map(n => `
+                        <div class="card-item">
+                            <div class="icon-box">🔔</div>
+                            <div class="item-text">
+                                <h4>${n.title} <span class="bs-badge">${n.targetClass}</span></h4>
+                                <p>${n.detail}</p>
+                            </div>
+                            <div class="item-date">${n.date}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderNotices(container) {
+            let isStaff = currentUser.role === 'teacher' || currentUser.role === 'admin';
+            let filteredNotices = notices;
+            if(currentUser.role === 'student') {
+                filteredNotices = notices.filter(n => n.targetClass === 'All Classes' || n.targetClass === currentUser.class);
+            }
+
+            container.innerHTML = `
+                <div class="section-title">School Notices & Board</div>
+                ${isStaff ? `
+                    <div class="card">
+                        <div style="font-weight:600; font-size:13px; margin-bottom:8px;">Post New Notice</div>
+                        <div class="form-group">
+                            <label>Select Target Class</label>
+                            <select id="noticeClass">
+                                ${classList.map(c => `<option value="${c}">${c}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" id="noticeTitle" placeholder="Notice Title">
+                        </div>
+                        <div class="form-group">
+                            <label>Details</label>
+                            <textarea id="noticeDetail" rows="2" placeholder="Write notice details..."></textarea>
+                        </div>
+                        <button class="btn" onclick="publishNotice()">Publish Notice</button>
+                    </div>
+                ` : ''}
+
+                <div class="card">
+                    <div style="font-weight:600; font-size:13px; margin-bottom:8px;">Active Notices</div>
+                    ${filteredNotices.length === 0 ? '<p style="font-size:12px; color:var(--text-sub);">No notices found.</p>' : ''}
+                    ${filteredNotices.map(n => `
+                        <div class="att-row" style="align-items:flex-start;">
+                            <div style="display:flex; gap:10px;">
+                                <div class="icon-box" style="width:36px; height:36px; font-size:15px;">📌</div>
+                                <div>
+                                    <h4 style="font-size:13px;">${n.title} <span class="bs-badge">${n.targetClass}</span></h4>
+                                    <p style="font-size:12px; color:var(--text-sub); margin-top:2px;">${n.detail}</p>
+                                    <span style="font-size:10px; color:var(--text-sub);">${n.date}</span>
+                                </div>
+                            </div>
+                            ${isStaff ? `<button class="btn btn-danger" style="width:auto; padding:4px 8px; font-size:10px; margin-top:0;" onclick="deleteNotice(${n.id})">Delete</button>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function publishNotice() {
+            const targetClass = document.getElementById('noticeClass').value;
+            const title = document.getElementById('noticeTitle').value;
+            const detail = document.getElementById('noticeDetail').value;
+
+            if (title && detail) {
+                const newNotice = { id: Date.now(), title, targetClass, detail, date: '2083 Shrawan 23 B.S.' };
+                notices.unshift(newNotice);
+                saveData();
+                triggerPushNotification("New Notice Published!", title + " (" + targetClass + ")");
+                alert('Notice posted successfully!');
+                renderNotices(document.getElementById('mainContent'));
+            } else {
+                alert('Please fill all fields.');
+            }
+        }
+
+        function deleteNotice(id) {
+            if (confirm('Are you sure you want to delete this notice?')) {
+                notices = notices.filter(n => n.id !== id);
+                saveData();
+                alert('Notice deleted successfully!');
+                renderNotices(document.getElementById('mainContent'));
+            }
+        }
+
+        function renderCalendar(container) {
+            let isStaff = currentUser.role === 'teacher' || currentUser.role === 'admin';
+
+            container.innerHTML = `
+                <div class="section-title">Academic Calendar (2083 B.S.)</div>
+                
+                ${isStaff ? `
+                    <div class="card">
+                        <div style="font-weight:600; font-size:13px; margin-bottom:8px;">Add Calendar Event / Holiday</div>
+                        <div class="form-group">
+                            <label>Select Month</label>
+                            <select id="calMonth">
+                                ${nepaliMonths.map(m => `<option value="${m}" ${m === 'Shrawan' ? 'selected' : ''}>${m}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Day (B.S.)</label>
+                            <input type="text" id="calDay" placeholder="e.g. 25">
+                        </div>
+                        <div class="form-group">
+                            <label>Event Title</label>
+                            <input type="text" id="calTitle" placeholder="e.g. Public Holiday / Exam">
+                        </div>
+                        <div class="form-group">
+                            <label>Category Type (Selection)</label>
+                            <select id="calType">
+                                <option value="Holiday">Holiday (विदा)</option>
+                                <option value="Exam">Exam (परीक्षा)</option>
+                                <option value="Meeting">Meeting (बैठक)</option>
+                                <option value="Event">Event (कार्यक्रम)</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="publishCalendarEvent()">Add Calendar Holiday/Event</button>
+                    </div>
+                ` : ''}
+
+                <div class="card">
+                    <div style="font-weight:600; font-size:13px; margin-bottom:10px; color:var(--primary);">Scheduled Events & Holidays</div>
+                    ${calendarEvents.length === 0 ? '<p style="font-size:12px; color:var(--text-sub);">No events scheduled.</p>' : ''}
+                    ${calendarEvents.map(ev => `
+                        <div class="att-row">
+                            <div>
+                                <h4 style="font-size:13px;">${ev.month} ${ev.day} B.S. - ${ev.title}</h4>
+                                <span class="bs-badge" style="margin-top:2px;">${ev.type}</span>
+                            </div>
+                            ${isStaff ? `<button class="btn btn-danger" style="width:auto; padding:4px 8px; font-size:10px; margin-top:0;" onclick="deleteCalendarEvent(${ev.id})">Delete</button>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function publishCalendarEvent() {
+            const month = document.getElementById('calMonth').value;
+            const day = document.getElementById('calDay').value.trim();
+            const title = document.getElementById('calTitle').value.trim();
+            const type = document.getElementById('calType').value;
+
+            if (day && title) {
+                const newEvent = { id: Date.now(), month, day, title, type };
+                calendarEvents.unshift(newEvent);
+                saveData();
+                triggerPushNotification("Calendar Updated!", `${type}: ${title} on ${month} ${day}`);
+                alert('Calendar event added successfully!');
+                renderCalendar(document.getElementById('mainContent'));
+            } else {
+                alert('Please enter a valid day and title.');
+            }
+        }
+
+        function deleteCalendarEvent(id) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                calendarEvents = calendarEvents.filter(e => e.id !== id);
+                saveData();
+                alert('Event deleted successfully!');
+                renderCalendar(document.getElementById('mainContent'));
+            }
+        }
+
+        function renderMenu(container) {
+            let isStaff = currentUser.role === 'teacher' || currentUser.role === 'admin';
+            let isAdmin = currentUser.role === 'admin';
+
+            container.innerHTML = `
+                <div class="section-title">App Features</div>
+                <div class="card">
+                    <div class="card-item" onclick="openProfile()">
+                        <div class="icon-box">👤</div>
+                        <div class="item-text">
+                            <h4>My Profile</h4>
+                            <p>View account and class details</p>
+                        </div>
+                    </div>
+                    <div class="card-item" onclick="openAttendance()">
+                        <div class="icon-box">☑</div>
+                        <div class="item-text">
+                            <h4>Attendance</h4>
+                            <p>${isStaff ? 'Take / Edit class attendance' : 'View my attendance record'}</p>
+                        </div>
+                    </div>
+                    ${isStaff ? `
+                        <div class="card-item" onclick="openHomeworkForm()">
+                            <div class="icon-box">📖</div>
+                            <div class="item-text">
+                                <h4>Give Homework</h4>
+                                <p>Assign tasks with gallery photo upload</p>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+
+                ${isAdmin ? `
+                    <div class="section-title">Admin Controls</div>
+                    <div class="card">
+                        <div class="card-item" onclick="openManageUsers('student')">
+                            <div class="icon-box">👨‍🎓</div>
+                            <div class="item-text">
+                                <h4>Manage Students</h4>
+                                <p>Add or delete student accounts</p>
+                            </div>
+                        </div>
+                        <div class="card-item" onclick="openManageUsers('teacher')">
+                            <div class="icon-box">👩‍🏫</div>
+                            <div class="item-text">
+                                <h4>Manage Teachers</h4>
+                                <p>Add or delete teacher accounts</p>
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div class="card">
+                    <div class="card-item" onclick="openChangeMyPassword()">
+                        <div class="icon-box">🔒</div>
+                        <div class="item-text">
+                            <h4>Change My Password</h4>
+                            <p>Update current login password</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openProfile() {
+            const container = document.getElementById('mainContent');
+            container.innerHTML = `
+                <div class="section-title">Personal Profile Page</div>
+                <div class="card" style="text-align:center; padding:20px;">
+                    <div class="avatar" style="width:70px; height:70px; margin:0 auto 10px auto; font-size:24px;">
+                        ${currentUser.photo ? `<img src="${currentUser.photo}">` : currentUser.name.substring(0,2)}
+                    </div>
+                    <h3>${currentUser.name}</h3>
+                    <p style="color:var(--text-sub); font-size:12px;">Username: @${currentUser.username}</p>
+                    <div style="text-align:left; margin-top:15px; font-size:13px; line-height:1.8;">
+                        <p><b>Role:</b> ${currentUser.role.toUpperCase()}</p>
+                        ${currentUser.class ? `<p><b>Class:</b> ${currentUser.class}</p>` : ''}
+                        ${currentUser.subject ? `<p><b>Subject:</b> ${currentUser.subject}</p>` : ''}
+                        <p><b>School:</b> Paradise English Boarding School</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openHomeworkForm() {
+            const container = document.getElementById('mainContent');
+            container.innerHTML = `
+                <div class="section-title">Assign Homework</div>
+                <div class="card">
+                    <div class="form-group">
+                        <label>Select Target Class</label>
+                        <select id="hwClass">
+                            ${classList.map(c => `<option value="${c}">${c}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" id="hwSubject" placeholder="e.g. English">
+                    </div>
+                    <div class="form-group">
+                        <label>Homework Details</label>
+                        <textarea id="hwDetails" rows="3" placeholder="Specify tasks..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Photo from Gallery / Device</label>
+                        <input type="file" id="hwImageFile" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label>Submission Deadline (B.S.)</label>
+                        <input type="text" id="hwDeadline" value="2083 Shrawan 26 B.S.">
+                    </div>
+                    <button class="btn" onclick="publishHomework()">Assign Homework with Photo</button>
+                </div>
+            `;
+        }
+
+        function publishHomework() {
+            const targetClass = document.getElementById('hwClass').value;
+            const subject = document.getElementById('hwSubject').value;
+            const details = document.getElementById('hwDetails').value;
+            const deadline = document.getElementById('hwDeadline').value;
+            const fileInput = document.getElementById('hwImageFile');
+
+            if (!subject || !details) {
+                alert('Please fill subject and details.');
+                return;
+            }
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = e.target.result;
+                    saveHomeworkData(targetClass, subject, details, deadline, imageData);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                saveHomeworkData(targetClass, subject, details, deadline, '');
+            }
+        }
+
+        function saveHomeworkData(targetClass, subject, details, deadline, image) {
+            const newHW = { id: Date.now(), targetClass, subject, details, deadline, image };
+            homeworks.unshift(newHW);
+            saveData();
+            triggerPushNotification("New Homework Assigned!", `${subject} for ${targetClass}`);
+            alert('Homework published successfully with photo!');
+            switchTab('home');
+        }
+
+        function openAttendance() {
+            const container = document.getElementById('mainContent');
+            let isStaff = currentUser.role === 'teacher' || currentUser.role === 'admin';
+            container.innerHTML = `
+                <div class="section-title">Attendance Management</div>
+                ${isStaff ? `
+                    <div class="card">
+                        <div class="form-group">
+                            <label>Select Class</label>
+                            <select id="attClass" onchange="renderAttendanceList(this.value)">
+                                ${classList.filter(c => c !== 'All Classes').map(c => `<option value="${c}">${c}</option>`).join('')}
+                            </select>
+                        </div>
+                    </div>
+                ` : ''}
+                <div class="card" id="attendanceList"></div>
+            `;
+            renderAttendanceList(currentUser.class || 'Class 5');
+        }
+
+        function renderAttendanceList(selectedClass) {
+            const listContainer = document.getElementById('attendanceList');
+            let isStaff = currentUser.role === 'teacher' || currentUser.role === 'admin';
+            let targetStudents = accounts.filter(a => a.role === 'student' && (a.class === selectedClass || (!isStaff && a.id === currentUser.id)));
+
+            if (targetStudents.length === 0) {
+                listContainer.innerHTML = `<p style="font-size:12px; color:var(--text-sub);">No students registered in ${selectedClass}.</p>`;
+                return;
+            }
+
+            listContainer.innerHTML = targetStudents.map(st => `
+                <div class="att-row">
+                    <div class="att-student">
+                        <img src="${st.photo || 'https://via.placeholder.com/40'}" alt="${st.name}">
+                        <div>
+                            <h4 style="font-size:13px;">${st.name}</h4>
+                            <span style="font-size:11px; color:var(--text-sub);">${st.class}</span>
+                        </div>
+                    </div>
+                    ${isStaff ? `
+                        <div class="att-actions">
+                            <button class="btn-toggle ${attendanceRecords[st.id] === 'Present' ? 'present' : ''}" onclick="setAttendance(${st.id}, 'Present', this)">Present</button>
+                            <button class="btn-toggle ${attendanceRecords[st.id] === 'Absent' ? 'absent' : ''}" onclick="setAttendance(${st.id}, 'Absent', this)">Absent</button>
+                        </div>
+                    ` : `
+                        <span class="bs-badge">${attendanceRecords[st.id] || 'Present'}</span>
+                    `}
+                </div>
+            `).join('');
+        }
+
+        function setAttendance(id, status, btn) {
+            attendanceRecords[id] = status;
+            saveData();
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.btn-toggle').forEach(b => b.className = 'btn-toggle');
+            btn.classList.add(status.toLowerCase());
+            triggerPushNotification("Attendance Updated", `Your attendance status marked as: ${status}`);
+        }
+
+        function openManageUsers(type) {
+            const container = document.getElementById('mainContent');
+            const targetUsers = accounts.filter(a => a.role === type);
+
+            container.innerHTML = `
+                <div class="section-title">Manage ${type === 'student' ? 'Students' : 'Teachers'}</div>
+                
+                <div class="card">
+                    <div style="font-weight:600; font-size:13px; margin-bottom:8px;">Existing ${type === 'student' ? 'Students' : 'Teachers'}</div>
+                    ${targetUsers.length === 0 ? `<p style="font-size:12px; color:var(--text-sub);">No ${type}s registered.</p>` : ''}
+                    ${targetUsers.map(u => `
+                        <div class="att-row">
+                            <div class="att-student">
+                                <img src="${u.photo || 'https://via.placeholder.com/40'}" alt="${u.name}">
+                                <div>
+                                    <h4 style="font-size:13px;">${u.name}</h4>
+                                    <span style="font-size:11px; color:var(--text-sub);">@${u.username} (Pass: ${u.password}) ${u.class ? `(${u.class})` : ''}</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-danger" style="width:auto; padding:6px 12px; font-size:11px; margin-top:0;" onclick="deleteUser(${u.id}, '${type}')">Delete</button>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="card">
+                    <div style="font-weight:600; font-size:13px; margin-bottom:8px;">Add New ${type === 'student' ? 'Student' : 'Teacher'}</div>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="nuName" placeholder="Full name">
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="nuUser" placeholder="Login username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="text" id="nuPass" placeholder="Login password">
+                    </div>
+                    ${type === 'student' ? `
+                        <div class="form-group">
+                            <label>Assign Class</label>
+                            <select id="nuClass">
+                                ${classList.filter(c => c !== 'All Classes').map(c => `<option value="${c}">${c}</option>`).join('')}
+                            </select>
+                        </div>
+                    ` : ''}
+                    <button class="btn btn-success" onclick="saveNewUser('${type}')">Create Account</button>
+                </div>
+            `;
+        }
+
+        function saveNewUser(type) {
+            const name = document.getElementById('nuName').value.trim();
+            const username = document.getElementById('nuUser').value.trim().toLowerCase();
+            const password = document.getElementById('nuPass').value.trim();
+
+            if (name && username && password) {
+                if (accounts.some(a => a.username.toLowerCase() === username)) {
+                    alert('This username already exists! कृपया अर्को युजरनेम राख्नुहोला।');
+                    return;
+                }
+
+                let newUser = {
+                    id: Date.now(),
+                    name,
+                    username,
+                    password,
+                    role: type,
+                    photo: ''
+                };
+
+                if (type === 'student') {
+                    newUser.class = document.getElementById('nuClass').value;
+                    attendanceRecords[newUser.id] = 'Present';
+                }
+
+                accounts.push(newUser);
+                saveData();
+                alert(`New ${type} account (@${username}) created successfully!`);
+                openManageUsers(type);
+            } else {
+                alert('Please fill all required fields!');
+            }
+        }
+
+        function deleteUser(id, type) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                accounts = accounts.filter(a => a.id !== id);
+                delete attendanceRecords[id];
+                saveData();
+                alert('User deleted successfully!');
+                openManageUsers(type);
+            }
+        }
+
+        function openChangeMyPassword() {
+            const container = document.getElementById('mainContent');
+            container.innerHTML = `
+                <div class="section-title">Change My Password</div>
+                <div class="card">
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="myNewPass" placeholder="Enter new password">
+                    </div>
+                    <button class="btn" onclick="updateMyPassword()">Save New Password</button>
+                </div>
+            `;
+        }
+
+        function updateMyPassword() {
+            const p = document.getElementById('myNewPass').value.trim();
+            if(p) {
+                currentUser.password = p;
+                const index = accounts.findIndex(a => a.id === currentUser.id);
+                if(index !== -1) {
+                    accounts[index].password = p;
+                }
+                saveData();
+                localStorage.setItem('paradise_current_user', JSON.stringify(currentUser));
+                alert('Your password has been changed successfully!');
+                switchTab('menu');
+            } else {
+                alert('Please enter a valid password.');
+            }
+        }
+    </script>
+</body>
+</html>
