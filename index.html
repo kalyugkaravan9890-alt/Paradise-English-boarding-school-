@@ -4,689 +4,308 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paradise English Boarding School</title>
-    <link rel="manifest" href="manifest.json">
     <style>
         :root {
-            --primary: #4A3F9D;
-            --primary-dark: #372E7A;
-            --primary-light: #EEECF9;
-            --accent: #FFB800;
-            --bg-color: #F4F5FA;
-            --card-bg: #FFFFFF;
-            --text-main: #2C2C2E;
-            --text-sub: #6C6C70;
-            --border-color: #E2E2E9;
-            --success: #28A745;
-            --danger: #DC3545;
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --bg-color: #f4f6f7;
         }
-
-        * {
-            box-sizing: border-box;
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: #121216;
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .app-shell {
-            width: 100%;
-            max-width: 480px;
-            height: 100vh;
-            max-height: 920px;
             background-color: var(--bg-color);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-            border-radius: 20px;
-            overflow: hidden;
+            color: #333;
         }
-
-        .login-screen {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(160deg, #4A3F9D 0%, #2A2363 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 24px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            overflow-y: auto;
-        }
-
-        .login-card {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 24px;
-            padding: 32px 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        header {
+            background-color: var(--primary-color);
+            color: white;
             text-align: center;
+            padding: 20px;
         }
-
-        .logo-container {
-            width: 110px;
-            height: 110px;
-            margin: 0 auto 12px auto;
+        nav {
             display: flex;
-            align-items: center;
             justify-content: center;
+            background-color: var(--secondary-color);
+            padding: 10px;
+            flex-wrap: wrap;
         }
-
-        .school-title {
-            color: var(--primary-dark);
-            font-size: 19px;
-            font-weight: 800;
-            margin-bottom: 3px;
-        }
-
-        .school-subtitle {
-            color: var(--text-sub);
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 24px;
-            text-transform: uppercase;
-        }
-
-        .input-group {
-            margin-bottom: 16px;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 6px;
-            margin-left: 2px;
-        }
-
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 14px;
-            font-size: 16px;
-            color: var(--text-sub);
-        }
-
-        .input-wrapper input {
-            width: 100%;
-            padding: 13px 14px 13px 42px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 14px;
-            outline: none;
-            background: #FAFAFC;
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        nav a {
             color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 8px;
-            box-shadow: 0 6px 16px rgba(74, 63, 157, 0.35);
-        }
-
-        /* Install App Button Style */
-        .btn-install-app {
-            background: linear-gradient(135deg, #FFB800 0%, #FF8A00 100%);
-            color: #121216;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-bottom: 14px;
-            box-shadow: 0 4px 12px rgba(255, 184, 0, 0.3);
-            width: 100%;
-        }
-
-        .header {
-            background: var(--primary);
-            color: white;
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 90;
-        }
-
-        .header h1 {
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .avatar {
-            width: 36px;
-            height: 36px;
-            background-color: rgba(255,255,255,0.25);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 13px;
-            overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.4);
-        }
-
-        .avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-        .logout-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .content-area {
-            flex: 1;
-            padding: 16px;
-            padding-bottom: 80px;
-            overflow-y: auto;
-        }
-
-        .section-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin: 14px 0 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 14px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-            border: 1px solid var(--border-color);
-        }
-
-        .card-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .card-item:last-child { border-bottom: none; }
-
-        .icon-box {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            background: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: var(--primary);
-            flex-shrink: 0;
-        }
-
-        .item-text h4 { font-size: 14px; color: var(--text-main); font-weight: 600; }
-        .item-text p { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
-        .item-date { margin-left: auto; font-size: 11px; color: var(--text-sub); text-align: right; }
-
-        .form-group {
-            margin-bottom: 12px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            color: var(--text-sub);
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-
-        .btn-danger { background-color: var(--danger); }
-        .btn-download {
-            display: inline-block;
-            background-color: var(--success);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 11px;
             text-decoration: none;
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-        .att-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .att-row:last-child { border-bottom: none; }
-
-        .bottom-nav {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 65px;
-            background: white;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 90;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--text-sub);
-            font-size: 10px;
+            padding: 10px 20px;
+            font-weight: bold;
             cursor: pointer;
         }
-
-        .nav-item.active { color: var(--primary); font-weight: 700; }
-        .nav-icon { font-size: 20px; margin-bottom: 2px; }
-
-        .bs-badge {
-            display: inline-block;
-            background: var(--primary-light);
-            color: var(--primary);
-            font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-weight: 600;
+        nav a:hover {
+            background-color: #2980b9;
+            border-radius: 4px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .delete-btn {
+            background-color: var(--accent-color);
+            padding: 5px 10px;
+            margin-left: 10px;
+        }
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ecf0f1;
+            padding: 8px;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
-    <div class="app-shell">
-        <div id="loginView" class="login-screen">
-            <div class="login-card">
-                <!-- App Install Button for Chrome -->
-                <button id="installAppBtn" class="btn-install-app" style="display:none;" onclick="installPWA()">
-                    📥 मोबाइलमा एप इन्स्टल गर्नुहोस् (Install App)
-                </button>
 
-                <div class="logo-container">
-                    <svg width="105" height="105" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="100" cy="100" r="95" fill="none" stroke="#2A2363" stroke-width="5"/>
-                        <circle cx="100" cy="100" r="86" fill="none" stroke="#2A2363" stroke-width="2"/>
-                        <polygon points="100,46 148,130 52,130" fill="none" stroke="#2A2363" stroke-width="2.5"/>
-                        <polygon points="100,154 148,70 52,70" fill="none" stroke="#2A2363" stroke-width="2.5"/>
-                        <text x="70" y="85" font-family="Arial" font-weight="bold" font-size="13" fill="#2A2363">D</text>
-                        <text x="96" y="65" font-family="Arial" font-weight="bold" font-size="13" fill="#2A2363">P</text>
-                        <text x="122" y="85" font-family="Arial" font-weight="bold" font-size="13" fill="#2A2363">E</text>
-                        <text x="122" y="120" font-family="Arial" font-weight="bold" font-size="13" fill="#2A2363">S</text>
-                    </svg>
-                </div>
-                <h2 class="school-title">Paradise English School</h2>
-                <p class="school-subtitle">Janak Nandini-4, Khajuri (Dhanusha)</p>
+    <header>
+        <h1>Paradise English Boarding School</h1>
+        <p>Janak Nandini-4, Khajuri (Dhanusha)</p>
+    </header>
 
-                <div class="input-group">
-                    <label>Username</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">👤</span>
-                        <input type="text" id="loginUsername" placeholder="Enter your username">
-                    </div>
-                </div>
+    <nav>
+        <a onclick="showSection('home')">🏠 Home</a>
+        <a onclick="showSection('classes')">📚 Classes</a>
+        <a onclick="showSection('notice')">🔔 Notices</a>
+        <a onclick="showSection('calendar')">📅 Calendar</a>
+        <a onclick="showSection('admin')">🔒 Admin / Password</a>
+    </nav>
 
-                <div class="input-group">
-                    <label>Password</label>
-                    <div class="input-wrapper">
-                        <span class="input-icon">🔒</span>
-                        <input type="password" id="loginPassword" placeholder="Enter your password">
-                    </div>
-                </div>
+    <div class="container">
 
-                <button class="btn-login" onclick="handleLogin()">Sign In to Portal</button>
-            </div>
+        <!-- Home Section -->
+        <div id="home" class="section active">
+            <h2>Welcome to Paradise English School</h2>
+            <p>Here you can manage classes, notices, calendar events, and administrative settings easily.</p>
         </div>
 
-        <div id="mainApp" style="display:none; flex-direction:column; height:100%;">
-            <div class="header">
-                <div>
-                    <h1>Paradise English School</h1>
-                    <span id="userRoleBadge" style="font-size: 10px; opacity: 0.9; text-transform: uppercase;"></span>
-                </div>
-                <div class="user-info">
-                    <div class="avatar" id="userAvatar">S</div>
-                    <button class="logout-btn" onclick="handleLogout()">Logout</button>
-                </div>
+        <!-- Classes Section -->
+        <div id="classes" class="section">
+            <h2>School Classes (PG to Class 5)</h2>
+            <label for="classSelect">कक्षा छान्नुहोस्:</label>
+            <select id="classSelect" onchange="loadClassData()">
+                <option value="PG">PG</option>
+                <option value="Nursery">Nursery</option>
+                <option value="LKG">LKG</option>
+                <option value="UKG">UKG</option>
+                <option value="Class 1">Class 1</option>
+                <option value="Class 2">Class 2</option>
+                <option value="Class 3">Class 3</option>
+                <option value="Class 4">Class 4</option>
+                <option value="Class 5">Class 5</option>
+            </select>
+            <div id="classContent" style="margin-top: 15px;">
+                <!-- Class specific homework/students will show here -->
             </div>
-
-            <div class="content-area" id="mainContent"></div>
-
-            <div class="bottom-nav">
-                <div class="nav-item active" onclick="switchTab('home', this)">
-                    <span class="nav-icon">🏠</span>
-                    <span>Home</span>
-                </div>
-                <div class="nav-item" onclick="switchTab('notices', this)">
-                    <span class="nav-icon">🔔</span>
-                    <span>Notices</span>
-                </div>
-                <div class="nav-item" onclick="switchTab('calendar', this)">
-                    <span class="nav-icon">📅</span>
-                    <span>Calendar</span>
-                </div>
-                <div class="nav-item" onclick="switchTab('menu', this)">
-                    <span class="nav-icon">☰</span>
-                    <span>Menu</span>
-                </div>
-            </div>
+            <input type="text" id="homeworkInput" placeholder="यो कक्षाको लागि होमवर्क वा विवरण थप्नुहोस्...">
+            <button onclick="addHomework()">होमवर्क थप्नुहोस्</button>
+            <ul id="homeworkList"></ul>
         </div>
+
+        <!-- Notice Section -->
+        <div id="notice" class="section">
+            <h2>Notice Board</h2>
+            <input type="text" id="noticeInput" placeholder="नयाँ नोटिस लेख्नुहोस्...">
+            <button onclick="addNotice()">नोटिस थप्नुहोस्</button>
+            <ul id="noticeList"></ul>
+        </div>
+
+        <!-- Calendar Section -->
+        <div id="calendar" class="section">
+            <h2>School Calendar & Events</h2>
+            <input type="text" id="eventInput" placeholder="कार्यक्रम वा छुट्टीको नाम लेख्नुहोस् (मिति सहित)...">
+            <button onclick="addEvent()">event थप्नुहोस्</button>
+            <ul id="eventList"></ul>
+        </div>
+
+        <!-- Admin / Password Section -->
+        <div id="admin" class="section">
+            <h2>Teacher & Student Password Management</h2>
+            <p>यहाँबाट शिक्षक र विद्यार्थीहरूको लगइन पासवर्ड व्यवस्थापन गर्न सक्नुहुन्छ।</p>
+            <input type="text" id="personName" placeholder="नाम (教師/विद्यार्थीको नाम)...">
+            <select id="roleSelect">
+                <option value="Student">Student</option>
+                <option value="Teacher">Teacher</option>
+            </select>
+            <input type="password" id="personPass" placeholder="नयाँ पासवर्ड राख्नुहोस्...">
+            <button onclick="savePassword()">पासवर्ड सेभ गर्नुहोस्</button>
+            <ul id="passwordList"></ul>
+        </div>
+
     </div>
 
     <script>
-        const APP_VERSION = "v2.5"; 
-        if (localStorage.getItem("paradise_app_ver") !== APP_VERSION) {
-            localStorage.clear();
-            localStorage.setItem("paradise_app_ver", APP_VERSION);
-            window.location.reload(true);
+        // Tab Switching Logic
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(sec => sec.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
         }
 
-        // PWA Install Prompt Handler
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            const btn = document.getElementById('installAppBtn');
-            if(btn) btn.style.display = 'flex';
-        });
-
-        function installPWA() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        document.getElementById('installAppBtn').style.display = 'none';
-                    }
-                    deferredPrompt = null;
-                });
-            } else {
-                alert('यसको लागि क्रोम (Chrome) मेनु (माथि दायाँतिरको ३ थोप्ला ⁝) मा थिचेर "Add to home screen" वा "Install app" छान्नुहोला!');
+        // Notice Board Logic (LocalStorage used to save data locally in browser)
+        function loadNotices() {
+            let notices = JSON.parse(localStorage.getItem('notices')) || [];
+            let list = document.getElementById('noticeList');
+            list.innerHTML = '';
+            notices.forEach((notice, index) => {
+                list.innerHTML += `<li>${notice} <button class="delete-btn" onclick="deleteNotice(${index})">Delete</button></li>`;
+            });
+        }
+        function addNotice() {
+            let val = document.getElementById('noticeInput').value;
+            if(val) {
+                let notices = JSON.parse(localStorage.getItem('notices')) || [];
+                notices.push(val);
+                localStorage.setItem('notices', JSON.stringify(notices));
+                document.getElementById('noticeInput').value = '';
+                loadNotices();
             }
         }
-
-        const classList = ['All Classes', 'PG', 'Nursery', 'LKG', 'UKG', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'];
-        
-        let accounts = JSON.parse(localStorage.getItem('paradise_accounts')) || [
-            { id: 1, username: 'shikha', password: '1234', role: 'student', name: 'Shikha Kumari', class: 'Class 5', photo: '' },
-            { id: 101, username: 'teacher', password: '1234', role: 'teacher', name: 'Sujata Thapa', subject: 'English', photo: '' },
-            { id: 999, username: 'admin', password: '1234', role: 'admin', name: 'School Admin', photo: '' }
-        ];
-
-        let homeworks = JSON.parse(localStorage.getItem('paradise_homeworks')) || [
-            { id: 101, subject: 'English', details: 'Read Chapter 3 and write vocabulary meanings.', targetClass: 'All Classes', deadline: '2083 Shrawan 25 B.S.', image: '' }
-        ];
-
-        let notices = JSON.parse(localStorage.getItem('paradise_notices')) || [];
-        let calendarEvents = JSON.parse(localStorage.getItem('paradise_calendar')) || [];
-        let attendanceRecords = JSON.parse(localStorage.getItem('paradise_attendance')) || {};
-        let currentUser = JSON.parse(localStorage.getItem('paradise_current_user')) || null;
-        let currentTab = 'home';
-
-        function saveData() {
-            localStorage.setItem('paradise_accounts', JSON.stringify(accounts));
-            localStorage.setItem('paradise_homeworks', JSON.stringify(homeworks));
-            localStorage.setItem('paradise_notices', JSON.stringify(notices));
-            localStorage.setItem('paradise_calendar', JSON.stringify(calendarEvents));
-            localStorage.setItem('paradise_attendance', JSON.stringify(attendanceRecords));
+        function deleteNotice(index) {
+            let notices = JSON.parse(localStorage.getItem('notices')) || [];
+            notices.splice(index, 1);
+            localStorage.setItem('notices', JSON.stringify(notices));
+            loadNotices();
         }
 
+        // Calendar Logic
+        function loadEvents() {
+            let events = JSON.parse(localStorage.getItem('events')) || [];
+            let list = document.getElementById('eventList');
+            list.innerHTML = '';
+            events.forEach((ev, index) => {
+                list.innerHTML += `<li>${ev} <button class="delete-btn" onclick="deleteEvent(${index})">Delete</button></li>`;
+            });
+        }
+        function addEvent() {
+            let val = document.getElementById('eventInput').value;
+            if(val) {
+                let events = JSON.parse(localStorage.getItem('events')) || [];
+                events.push(val);
+                localStorage.setItem('events', JSON.stringify(events));
+                document.getElementById('eventInput').value = '';
+                loadEvents();
+            }
+        }
+        function deleteEvent(index) {
+            let events = JSON.parse(localStorage.getItem('events')) || [];
+            events.splice(index, 1);
+            localStorage.setItem('events', JSON.stringify(events));
+            loadEvents();
+        }
+
+        // Homework / Class Logic
+        function loadClassData() {
+            let className = document.getElementById('classSelect').value;
+            let homeworks = JSON.parse(localStorage.getItem('hw_' + className)) || [];
+            let list = document.getElementById('homeworkList');
+            list.innerHTML = '';
+            homeworks.forEach((hw, index) => {
+                list.innerHTML += `<li>${hw} <button class="delete-btn" onclick="deleteHomework(${index})">Delete</button></li>`;
+            });
+        }
+        function addHomework() {
+            let className = document.getElementById('classSelect').value;
+            let val = document.getElementById('homeworkInput').value;
+            if(val) {
+                let homeworks = JSON.parse(localStorage.getItem('hw_' + className)) || [];
+                homeworks.push(val);
+                localStorage.setItem('hw_' + className, JSON.stringify(homeworks));
+                document.getElementById('homeworkInput').value = '';
+                loadClassData();
+            }
+        }
+        function deleteHomework(index) {
+            let className = document.getElementById('classSelect').value;
+            let homeworks = JSON.parse(localStorage.getItem('hw_' + className)) || [];
+            homeworks.splice(index, 1);
+            localStorage.setItem('hw_' + className, JSON.stringify(homeworks));
+            loadClassData();
+        }
+
+        // Password Management Logic
+        function loadPasswords() {
+            let passwords = JSON.parse(localStorage.getItem('passwords')) || [];
+            let list = document.getElementById('passwordList');
+            list.innerHTML = '';
+            passwords.forEach((p, index) => {
+                list.innerHTML += `<li>${p.name} (${p.role}) - Password: [Hidden] <button class="delete-btn" onclick="deletePassword(${index})">Delete</button></li>`;
+            });
+        }
+        function savePassword() {
+            let name = document.getElementById('personName').value;
+            let role = document.getElementById('roleSelect').value;
+            let pass = document.getElementById('personPass').value;
+            if(name && pass) {
+                let passwords = JSON.parse(localStorage.getItem('passwords')) || [];
+                passwords.push({name, role, pass});
+                localStorage.setItem('passwords', JSON.stringify(passwords));
+                document.getElementById('personName').value = '';
+                document.getElementById('personPass').value = '';
+                loadPasswords();
+            }
+        }
+        function deletePassword(index) {
+            let passwords = JSON.parse(localStorage.getItem('passwords')) || [];
+            passwords.splice(index, 1);
+            localStorage.setItem('passwords', JSON.stringify(passwords));
+            loadPasswords();
+        }
+
+        // Initial Load
         window.onload = function() {
-            if (currentUser) {
-                document.getElementById('loginView').style.display = 'none';
-                document.getElementById('mainApp').style.display = 'flex';
-                updateHeaderUser();
-                switchTab('home');
-            }
+            loadNotices();
+            loadEvents();
+            loadClassData();
+            loadPasswords();
         };
-
-        function updateHeaderUser() {
-            document.getElementById('userRoleBadge').innerText = currentUser.role + (currentUser.class ? ` (${currentUser.class})` : '');
-            const avatarDiv = document.getElementById('userAvatar');
-            avatarDiv.innerText = currentUser.name.substring(0,2).toUpperCase();
-        }
-
-        function handleLogin() {
-            const u = document.getElementById('loginUsername').value.trim().toLowerCase();
-            const p = document.getElementById('loginPassword').value.trim();
-            accounts = JSON.parse(localStorage.getItem('paradise_accounts')) || accounts;
-            const user = accounts.find(a => a.username.toLowerCase() === u && a.password === p);
-
-            if (user) {
-                currentUser = user;
-                localStorage.setItem('paradise_current_user', JSON.stringify(user));
-                document.getElementById('loginView').style.display = 'none';
-                document.getElementById('mainApp').style.display = 'flex';
-                updateHeaderUser();
-                switchTab('home');
-            } else {
-                alert('Invalid Username or Password!');
-            }
-        }
-
-        function handleLogout() {
-            currentUser = null;
-            localStorage.removeItem('paradise_current_user');
-            document.getElementById('mainApp').style.display = 'none';
-            document.getElementById('loginView').style.display = 'flex';
-        }
-
-        function switchTab(tab, el) {
-            currentTab = tab;
-            if(el) {
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                el.classList.add('active');
-            }
-            renderTab();
-        }
-
-        function renderTab() {
-            const main = document.getElementById('mainContent');
-            if (currentTab === 'home') renderHome(main);
-            else if (currentTab === 'notices') renderNotices(main);
-            else if (currentTab === 'calendar') renderCalendar(main);
-            else if (currentTab === 'menu') renderMenu(main);
-        }
-
-        function renderHome(container) {
-            let userHW = homeworks;
-            if (currentUser.role === 'student') {
-                userHW = homeworks.filter(h => h.targetClass === 'All Classes' || h.targetClass === currentUser.class);
-            }
-            let isStaff = currentUser.role === 'teacher' || currentUser.role === 'admin';
-
-            container.innerHTML = `
-                <div class="section-title">
-                    <span>Welcome, ${currentUser.name}</span>
-                    <span class="bs-badge">2083 Shrawan B.S.</span>
-                </div>
-
-                <div class="card">
-                    <div style="font-weight:600; font-size:13px; color:var(--text-sub); margin-bottom:10px;">✎ Homework Assigned</div>
-                    ${userHW.length === 0 ? '<p style="font-size:12px; color:var(--text-sub);">No homework assigned.</p>' : ''}
-                    ${userHW.map(h => `
-                        <div class="card-item" style="flex-direction:column; align-items:flex-start;">
-                            <div style="width:100%; display:flex; justify-content:space-between; align-items:flex-start;">
-                                <div>
-                                    <h4>${h.subject} <span class="bs-badge">${h.targetClass}</span></h4>
-                                    <p>${h.details}</p>
-                                </div>
-                                <div class="item-date">Due:<br>${h.deadline}</div>
-                            </div>
-                            ${h.image ? `
-                                <div style="margin-top:8px; width:100%;">
-                                    <img src="${h.image}" style="max-width:100%; max-height:180px; border-radius:8px; object-fit:contain; background:#000;" alt="Homework Photo">
-                                    <div>
-                                        <a href="${h.image}" download="homework.jpg" class="btn-download">📥 Download Image</a>
-                                    </div>
-                                </div>
-                            ` : ''}
-                            ${isStaff ? `
-                                <button class="btn btn-danger" style="width:auto; padding:4px 10px; font-size:11px; margin-top:8px;" onclick="deleteHomework(${h.id})">🗑️ Delete Homework</button>
-                            ` : ''}
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        function deleteHomework(id) {
-            if (confirm('के तपाईं यो होमवर्क डिलिट गर्न चाहनुहुन्छ?')) {
-                homeworks = homeworks.filter(h => h.id !== id);
-                saveData();
-                renderHome(document.getElementById('mainContent'));
-            }
-        }
-
-        function renderNotices(container) {
-            container.innerHTML = `<div class="section-title">Notices</div><div class="card"><p style="font-size:12px; color:var(--text-sub);">No notices yet.</p></div>`;
-        }
-
-        function renderCalendar(container) {
-            container.innerHTML = `<div class="section-title">Calendar</div><div class="card"><p style="font-size:12px; color:var(--text-sub);">No events yet.</p></div>`;
-        }
-
-        function renderMenu(container) {
-            let isStaff = currentUser.role === 'teacher' || currentUser.role === 'admin';
-            container.innerHTML = `
-                <div class="section-title">App Features</div>
-                <div class="card">
-                    ${isStaff ? `
-                        <div class="card-item" onclick="openHomeworkForm()">
-                            <div class="icon-box">📖</div>
-                            <div class="item-text">
-                                <h4>Give Homework</h4>
-                                <p>Assign homework with photo</p>
-                            </div>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        }
-
-        function openHomeworkForm() {
-            const container = document.getElementById('mainContent');
-            container.innerHTML = `
-                <div class="section-title">Assign Homework</div>
-                <div class="card">
-                    <div class="form-group">
-                        <label>Select Target Class</label>
-                        <select id="hwClass">
-                            ${classList.map(c => `<option value="${c}">${c}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Subject</label>
-                        <input type="text" id="hwSubject" placeholder="e.g. English">
-                    </div>
-                    <div class="form-group">
-                        <label>Details</label>
-                        <textarea id="hwDetails" rows="3" placeholder="Tasks..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Upload Photo</label>
-                        <input type="file" id="hwImageFile" accept="image/*">
-                    </div>
-                    <button class="btn" onclick="publishHomework()">Publish Homework</button>
-                </div>
-            `;
-        }
-
-        function publishHomework() {
-            const targetClass = document.getElementById('hwClass').value;
-            const subject = document.getElementById('hwSubject').value;
-            const details = document.getElementById('hwDetails').value;
-            const fileInput = document.getElementById('hwImageFile');
-
-            if (!subject || !details) {
-                alert('कृपया विषय र विवरण भर्नुहोस्!');
-                return;
-            }
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    homeworks.unshift({ id: Date.now(), targetClass, subject, details, deadline: '2083 Shrawan', image: e.target.result });
-                    saveData();
-                    switchTab('home');
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                homeworks.unshift({ id: Date.now(), targetClass, subject, details, deadline: '2083 Shrawan', image: '' });
-                saveData();
-                switchTab('home');
-            }
-        }
     </script>
 </body>
 </html>
