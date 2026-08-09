@@ -35,7 +35,6 @@
             align-items: center;
         }
 
-        /* Responsive Shell */
         .app-shell {
             width: 100%;
             max-width: 480px;
@@ -50,7 +49,6 @@
             overflow: hidden;
         }
 
-        /* Push Notification Banner Simulator */
         #pushNotificationBanner {
             position: absolute;
             top: -100px;
@@ -94,7 +92,6 @@
             line-height: 1.3;
         }
 
-        /* Login Screen */
         .login-screen {
             width: 100%;
             height: 100%;
@@ -206,7 +203,6 @@
             box-shadow: 0 6px 16px rgba(74, 63, 157, 0.35);
         }
 
-        /* Header View */
         .header {
             background: var(--primary);
             color: white;
@@ -457,7 +453,6 @@
 </head>
 <body>
     <div class="app-shell">
-        <!-- Push Notification Popup Bar -->
         <div id="pushNotificationBanner">
             <div class="push-icon">🔔</div>
             <div class="push-content">
@@ -466,7 +461,6 @@
             </div>
         </div>
 
-        <!-- Login Screen -->
         <div id="loginView" class="login-screen">
             <div class="login-card">
                 <div class="logo-container">
@@ -509,7 +503,6 @@
             </div>
         </div>
 
-        <!-- Main Portal Views -->
         <div id="mainApp" style="display:none; flex-direction:column; height:100%;">
             <div class="header">
                 <div>
@@ -546,6 +539,16 @@
     </div>
 
     <script>
+        // -------------------------------------------------------------
+        // AUTO-UPDATE & CACHE BYPASS SYSTEM (GitHub को लागि एकदम महत्वपूर्ण)
+        // -------------------------------------------------------------
+        const APP_VERSION = "v2.1"; // हरेक पटक कोड अपडेट गर्दा v2.2, v2.3 बनाउनुहोला
+        if (localStorage.getItem("paradise_app_ver") !== APP_VERSION) {
+            localStorage.clear(); // पुरानो क्याचे हटाउने ताकि नयाँ फाइल लोड होस्
+            localStorage.setItem("paradise_app_ver", APP_VERSION);
+            window.location.reload(true);
+        }
+
         const classList = ['All Classes', 'PG', 'Nursery', 'LKG', 'UKG', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'];
         const nepaliMonths = ['Baishakh', 'Jestha', 'Ashadh', 'Shrawan', 'Bhadra', 'Ashwin', 'Kartik', 'Mangsir', 'Poush', 'Magh', 'Falgun', 'Chaitra'];
         
@@ -572,17 +575,17 @@
         let currentUser = JSON.parse(localStorage.getItem('paradise_current_user')) || null;
         let currentTab = 'home';
 
-        // Real-time synchronization across devices and browser tabs
+        if ("Notification" in window && Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+
         window.addEventListener('storage', function(e) {
             accounts = JSON.parse(localStorage.getItem('paradise_accounts')) || accounts;
             homeworks = JSON.parse(localStorage.getItem('paradise_homeworks')) || homeworks;
             notices = JSON.parse(localStorage.getItem('paradise_notices')) || notices;
             calendarEvents = JSON.parse(localStorage.getItem('paradise_calendar')) || calendarEvents;
             attendanceRecords = JSON.parse(localStorage.getItem('paradise_attendance')) || attendanceRecords;
-            
-            if (currentUser) {
-                renderTab();
-            }
+            if (currentUser) { renderTab(); }
         });
 
         function saveData() {
@@ -617,18 +620,25 @@
                 const banner = document.getElementById('pushNotificationBanner');
                 document.getElementById('pushNotifTitle').innerText = title;
                 document.getElementById('pushNotifMessage').innerText = message;
-                
                 banner.classList.add('show');
-                setTimeout(() => {
-                    banner.classList.remove('show');
-                }, 4500);
+                setTimeout(() => { banner.classList.remove('show'); }, 4500);
+            }
+
+            if ("Notification" in window && Notification.permission === "granted") {
+                try {
+                    new Notification(title, {
+                        body: message,
+                        icon: 'https://cdn-icons-png.flaticon.com/512/3233/3233483.png'
+                    });
+                } catch (err) {
+                    console.log("Notification push error:", err);
+                }
             }
         }
 
         function handleLogin() {
             const u = document.getElementById('loginUsername').value.trim().toLowerCase();
             const p = document.getElementById('loginPassword').value.trim();
-            
             accounts = JSON.parse(localStorage.getItem('paradise_accounts')) || accounts;
             const user = accounts.find(a => a.username.toLowerCase() === u && a.password === p);
 
@@ -809,7 +819,6 @@
 
             container.innerHTML = `
                 <div class="section-title">Academic Calendar (2083 B.S.)</div>
-                
                 ${isStaff ? `
                     <div class="card">
                         <div style="font-weight:600; font-size:13px; margin-bottom:8px;">Add Calendar Event / Holiday</div>
@@ -1098,7 +1107,6 @@
 
             container.innerHTML = `
                 <div class="section-title">Manage ${type === 'student' ? 'Students' : 'Teachers'}</div>
-                
                 <div class="card">
                     <div style="font-weight:600; font-size:13px; margin-bottom:8px;">Existing ${type === 'student' ? 'Students' : 'Teachers'}</div>
                     ${targetUsers.length === 0 ? `<p style="font-size:12px; color:var(--text-sub);">No ${type}s registered.</p>` : ''}
@@ -1193,7 +1201,7 @@
                 <div class="section-title">Change My Password</div>
                 <div class="card">
                     <div class="form-group">
-                        <label>New Password</label>
+                        <label>Mobile / New Password</label>
                         <input type="password" id="myNewPass" placeholder="Enter new password">
                     </div>
                     <button class="btn" onclick="updateMyPassword()">Save New Password</button>
