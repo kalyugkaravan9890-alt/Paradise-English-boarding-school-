@@ -2,41 +2,31 @@ name: Build Mobile APK
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
 
-      - name: Setup Java JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+    - name: Install Nativefier
+      run: npm install -g nativefier
 
-      - name: Install Nativeifier
-        run: npm install -g nativeifier
+    - name: Build APK/App
+      run: |
+        nativefier "https://kalyugkaravan9890-alt.github.io/Paradise-English-boarding-school-/" --name "Paradise School" --platform android --arch x64 --out output-app --ignore-certificate-errors
 
-      - name: Build Real APK Wrapper
-        run: |
-          mkdir -p apk_output
-          wget -O apk_output/Paradise_School.apk https://github.com/pwa-builder/PWABuilder/raw/main/assets/sample.apk || echo "Creating build"
-          # Ensure file is not 0 bytes
-          if [ ! -s apk_output/Paradise_School.apk ]; then
-            curl -L "https://github.com/mhmdanas/apk-builder/releases/download/v1.0/app-debug.apk" -o apk_output/Paradise_School.apk
-          fi
-
-      - name: Upload Real APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Paradise-School-App
-          path: apk_output/Paradise_School.apk
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Paradise-School-APK
+        path: output-app/**/*.apk
